@@ -32,7 +32,7 @@ const fileUpload = require('express-fileupload');
 // Validation Middleware
 
 // mongodb://localhost:27017/my_database
-mongoose.connect('your-mongodb-url', { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://miler:1234@cluster0.gfjfvlt.mongodb.net/?appName=Cluster0', { useNewUrlParser: true });
 
 app.set('view engine', 'ejs');
 
