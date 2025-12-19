@@ -31,8 +31,17 @@ const redirectIfAuthenticatedMiddleware = require('./middleware/redirectIfAuthen
 const fileUpload = require('express-fileupload');
 // Validation Middleware
 
-// mongodb://localhost:27017/my_database
-mongoose.connect('mongodb+srv://miler:1234@cluster0.gfjfvlt.mongodb.net/?appName=Cluster0', { useNewUrlParser: true });
+// *******************************************************************
+// [ปรับปรุง 1]: อ่าน Connection String จาก Environment Variable (MONGO_URI)
+// *******************************************************************
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
+
+// [เพิ่ม]: แสดงผลใน Console เมื่อเชื่อมต่อสำเร็จ/ล้มเหลว
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', function() {
+  console.log('Mongoose connected successfully to MongoDB Atlas!');
+});
 
 app.set('view engine', 'ejs');
 
@@ -85,11 +94,11 @@ app.get('/posts/delete/:id', authMiddleware, deletePostController)
 
 app.use((req, res) => res.render('notfound'));
 
-let port = process.env.PORT;
-if (port == null || port == "") {
-    port = 4000;
-}
+// *******************************************************************
+// [ปรับปรุง 2]: ใช้ process.env.PORT โดยตรง และแสดง Port ที่รันจริงใน Log
+// *******************************************************************
+const port = process.env.PORT || 4000;
 
 app.listen(port, () => {
-    console.log('App listening on port 4000');
+    console.log(`App listening on port ${port}`); // เปลี่ยน 4000 เป็นตัวแปร port
 })
